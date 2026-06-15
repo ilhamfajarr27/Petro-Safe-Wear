@@ -24,22 +24,30 @@ const GAS_THRESHOLD = 200;
 
 async function fetchBlynkData() {
     try {
-        // Fetching V0 (Suhu), V1 (Heat Index), V2 (Gas PPM), V3 (Status)
-        const [resV0, resV1, resV2, resV3] = await Promise.all([
+        // Fetching Connection Status and Datastreams
+        const [resConn, resV0, resV1, resV2, resV3] = await Promise.all([
+            fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${BLYNK_AUTH_TOKEN}`),
             fetch(`${BLYNK_URL}&V0`),
             fetch(`${BLYNK_URL}&V1`),
             fetch(`${BLYNK_URL}&V2`),
             fetch(`${BLYNK_URL}&V3`)
         ]);
 
-        if (!resV0.ok || !resV1.ok || !resV2.ok || !resV3.ok) {
+        if (!resConn.ok || !resV0.ok || !resV1.ok || !resV2.ok || !resV3.ok) {
             throw new Error("Failed to fetch from Blynk");
         }
 
+        const isConnected = (await resConn.text()).trim();
         const suhu = await resV0.text();
         const heat = await resV1.text();
         const gas = await resV2.text();
         const status = await resV3.text();
+
+        // If ESP32 is unplugged, Blynk API returns "false"
+        if (isConnected !== "true") {
+            setOfflineState();
+            return; // Stop updating the UI so it stays offline
+        }
 
         updateDashboard(
             parseFloat(suhu) || 0, 
@@ -134,6 +142,16 @@ function setOfflineState() {
     elStatusIcon.innerText = "cloud_off";
     elStatusText.innerText = "Koneksi Terputus";
     elStatusDesc.innerText = "Tidak dapat terhubung ke alat. Periksa koneksi WiFi pada perangkat ESP32.";
+
+    // Make the values zero/dash to visually indicate offline
+    elSuhuVal.innerText = "--";
+    elSuhuBar.style.height = "0%";
+    
+    elHeatVal.innerText = "--";
+    elHeatCircle.setAttribute('stroke-dasharray', "0, 100");
+
+    elGasVal.innerText = "--";
+    elGasMeter.style.width = "0%";
 }
 
 function updateTime() {
