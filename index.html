@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petro Safe Wear | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-grid">
+            
+            <!-- Card 1: Device Info (Like Profile Card) -->
+            <div class="card device-card">
+                <div class="profile-img-container">
+                    <!-- Industrial/Worker gradient background instead of image to prevent broken links -->
+                    <div class="profile-gradient"></div>
+                    <div class="img-overlay"></div>
+                    <div class="profile-info">
+                        <h2>Petro Safe Wear</h2>
+                        <p>Worker Monitoring</p>
+                        <div class="badge-price" id="status-badge">Connecting...</div>
+                    </div>
+                </div>
+                <div class="device-menu">
+                    <div class="menu-item">
+                        <span>Device ID</span>
+                        <strong>TMPL6arT2JLYr</strong>
+                    </div>
+                    <div class="menu-item">
+                        <span>Location</span>
+                        <strong>Refinery A</strong>
+                    </div>
+                    <div class="menu-item">
+                        <span>Last Update</span>
+                        <strong id="last-update">Just now</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Suhu (Like Progress Card) -->
+            <div class="card metric-card suhu-card">
+                <div class="card-header">
+                    <h3>Area Temperature</h3>
+                    <button class="icon-btn"><span class="material-icons">north_east</span></button>
+                </div>
+                <div class="metric-primary">
+                    <span id="suhu-val">0.0</span>
+                    <span class="unit">°C</span>
+                </div>
+                <div class="bar-chart">
+                    <div class="bar"><div class="fill" style="height: 30%"></div></div>
+                    <div class="bar"><div class="fill" style="height: 50%"></div></div>
+                    <div class="bar"><div class="fill" style="height: 40%"></div></div>
+                    <div class="bar"><div class="fill" style="height: 70%"></div></div>
+                    <div class="bar"><div class="fill highlight" id="suhu-bar" style="height: 0%"></div></div>
+                    <div class="axis">
+                        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Now</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Heat Index (Like Time Tracker Card) -->
+            <div class="card metric-card heat-card">
+                <div class="card-header">
+                    <h3>Heat Index</h3>
+                    <button class="icon-btn"><span class="material-icons">north_east</span></button>
+                </div>
+                <div class="circular-progress-wrapper">
+                    <svg class="circular-chart" viewBox="0 0 36 36">
+                        <path class="circle-bg"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path class="circle-fg" id="heat-circle"
+                            stroke-dasharray="0, 100"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                    </svg>
+                    <div class="progress-text">
+                        <div id="heat-val" class="time">0.0</div>
+                        <div class="label">Celcius</div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="ctrl-btn"><span class="material-icons">thermostat</span></button>
+                </div>
+            </div>
+
+            <!-- Card 4: Gas Level (Like Dark Onboarding Card) -->
+            <div class="card dark-card gas-card">
+                <div class="dark-header">
+                    <h3>Gas MQ-135</h3>
+                    <span class="fraction" id="gas-val">0</span>
+                    <span class="fraction-label">PPM</span>
+                </div>
+                
+                <div class="gas-visual">
+                    <div class="gas-track">
+                        <div class="gas-fill safe" id="gas-meter" style="width: 0%"></div>
+                    </div>
+                    <div class="gas-labels">
+                        <span>0</span>
+                        <span>200</span>
+                        <span>500</span>
+                    </div>
+                </div>
+
+                <div class="task-list">
+                    <div class="task-item active" id="gas-safe-indicator">
+                        <div class="task-icon"><span class="material-icons">check_circle</span></div>
+                        <div class="task-info">
+                            <h4>Safe Level</h4>
+                            <p>&lt; 200 PPM</p>
+                        </div>
+                        <div class="task-check"><span class="material-icons">radio_button_checked</span></div>
+                    </div>
+                    <div class="task-item" id="gas-danger-indicator">
+                        <div class="task-icon danger"><span class="material-icons">warning</span></div>
+                        <div class="task-info">
+                            <h4>Danger Level</h4>
+                            <p>&gt; 200 PPM</p>
+                        </div>
+                        <div class="task-check"><span class="material-icons">radio_button_unchecked</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: System Status (Like Wide Calendar Card) -->
+            <div class="card status-card">
+                <div class="status-header">
+                    <span class="month">Live Monitor</span>
+                    <h3 class="year">System Status</h3>
+                    <span class="month end">Alerts</span>
+                </div>
+                <div class="status-content" id="system-status-box">
+                    <div class="status-icon-large">
+                        <span class="material-icons" id="status-icon">sync</span>
+                    </div>
+                    <div class="status-details">
+                        <h2 id="status-text">Menunggu Data...</h2>
+                        <p id="status-desc">Menghubungkan ke Blynk Cloud & Mengambil parameter K3...</p>
+                    </div>
+                    <div class="avatars">
+                        <div class="avatar-circle">AD</div>
+                        <div class="avatar-circle">HS</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
